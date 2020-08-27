@@ -1,9 +1,15 @@
 package io.axoniq.labs.chat.query.rooms.summary;
 
+import io.axoniq.labs.chat.coreapi.RoomCreatedEvent;
+import org.axonframework.eventhandling.EventHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RoomSummaryProjection {
+
+    private static final Logger logger = LoggerFactory.getLogger(RoomSummaryProjection.class);
 
     private final RoomSummaryRepository roomSummaryRepository;
 
@@ -11,7 +17,12 @@ public class RoomSummaryProjection {
         this.roomSummaryRepository = roomSummaryRepository;
     }
 
-    // TODO: Create some event handlers that update this model when necessary.
+    @EventHandler
+    public void on(RoomCreatedEvent event) {
+        logger.debug("handling projection event {}", event);
+        RoomSummary summary = new RoomSummary(event.getRoomId(), event.getName());
+        roomSummaryRepository.save(summary);
+    }
 
     // TODO: Create the query handler to read data from this model.
 }

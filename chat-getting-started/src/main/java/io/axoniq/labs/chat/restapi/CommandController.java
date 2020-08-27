@@ -1,5 +1,6 @@
 package io.axoniq.labs.chat.restapi;
 
+import io.axoniq.labs.chat.coreapi.CreateRoomCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +23,7 @@ public class CommandController {
 
     @PostMapping("/rooms")
     public Future<String> createChatRoom(@RequestBody @Valid Room room) {
-        // TODO: Send a command for this API call.
-        throw new UnsupportedOperationException("Not implemented yet");
+        return commandGateway.send(new CreateRoomCommand(room.getRoomId(), room.getName()));
     }
 
     @PostMapping("/rooms/{roomId}/participants")
