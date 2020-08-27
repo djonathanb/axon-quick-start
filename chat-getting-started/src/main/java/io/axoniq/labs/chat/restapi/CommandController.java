@@ -3,6 +3,7 @@ package io.axoniq.labs.chat.restapi;
 import io.axoniq.labs.chat.coreapi.CreateRoomCommand;
 import io.axoniq.labs.chat.coreapi.JoinRoomCommand;
 import io.axoniq.labs.chat.coreapi.LeaveRoomCommand;
+import io.axoniq.labs.chat.coreapi.PostMessageCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +36,7 @@ public class CommandController {
 
     @PostMapping("/rooms/{roomId}/messages")
     public Future<Void> postMessage(@PathVariable String roomId, @RequestBody @Valid PostMessageRequest message) {
-        // TODO: Send a command for this API call.
-        throw new UnsupportedOperationException("Not implemented yet");
+        return commandGateway.send(new PostMessageCommand(roomId, message.getParticipant(), message.getMessage()));
     }
 
     @DeleteMapping("/rooms/{roomId}/participants")

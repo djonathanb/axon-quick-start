@@ -54,6 +54,17 @@ public class ChatRoom {
         }
     }
 
+    @CommandHandler
+    public void handle(PostMessageCommand command) {
+        logger.debug("handling command {}", command);
+        logger.trace("handling command {}", participants);
+        logger.trace("### does participant already joined? {}", participants.contains(command.getParticipant()));
+        if (!participants.contains(command.getParticipant())) {
+            throw new ParticipantNotSubscribedException("The participant has not joined the room!");
+        }
+        apply(new MessagePostedEvent(command.getRoomId(), command.getParticipant(), command.getMessage()));
+    }
+
     @EventSourcingHandler
     public void on(RoomCreatedEvent event) {
         logger.debug("handling sourcing event {}", event);
@@ -72,6 +83,12 @@ public class ChatRoom {
     public void on(ParticipantLeftRoomEvent event) {
         logger.debug("handling sourcing event {}", event);
         participants.remove(event.getParticipant());
+    }
+
+    private class ParticipantNotSubscribedException extends IllegalStateException {
+        public ParticipantNotSubscribedException(String message) {
+            super(message);
+        }
     }
 
 }
