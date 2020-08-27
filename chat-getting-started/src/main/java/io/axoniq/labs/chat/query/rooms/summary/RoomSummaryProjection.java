@@ -1,6 +1,7 @@
 package io.axoniq.labs.chat.query.rooms.summary;
 
 import io.axoniq.labs.chat.coreapi.ParticipantJoinedRoomEvent;
+import io.axoniq.labs.chat.coreapi.ParticipantLeftRoomEvent;
 import io.axoniq.labs.chat.coreapi.RoomCreatedEvent;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
@@ -30,6 +31,14 @@ public class RoomSummaryProjection {
         logger.debug("handling projection event {}", event);
         RoomSummary summary = roomSummaryRepository.getOne(event.getRoomId());
         summary.addParticipant();
+        roomSummaryRepository.save(summary);
+    }
+
+    @EventHandler
+    public void on(ParticipantLeftRoomEvent event) {
+        logger.debug("handling projection event {}", event);
+        RoomSummary summary = roomSummaryRepository.getOne(event.getRoomId());
+        summary.removeParticipant();
         roomSummaryRepository.save(summary);
     }
 

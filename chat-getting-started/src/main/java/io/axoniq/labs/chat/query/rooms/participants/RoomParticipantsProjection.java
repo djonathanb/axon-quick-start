@@ -1,6 +1,7 @@
 package io.axoniq.labs.chat.query.rooms.participants;
 
 import io.axoniq.labs.chat.coreapi.ParticipantJoinedRoomEvent;
+import io.axoniq.labs.chat.coreapi.ParticipantLeftRoomEvent;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,12 @@ public class RoomParticipantsProjection {
         logger.debug("handling projection event {}", event);
         RoomParticipant roomParticipant = new RoomParticipant(event.getRoomId(), event.getParticipant());
         repository.save(roomParticipant);
+    }
+
+    @EventHandler
+    public void on(ParticipantLeftRoomEvent event) {
+        logger.debug("handling projection event {}", event);
+        repository.deleteByParticipantAndRoomId(event.getParticipant(), event.getRoomId());
     }
 
     // TODO: Create the query handler to read data from this model.

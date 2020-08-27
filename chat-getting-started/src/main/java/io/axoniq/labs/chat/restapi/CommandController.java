@@ -2,6 +2,7 @@ package io.axoniq.labs.chat.restapi;
 
 import io.axoniq.labs.chat.coreapi.CreateRoomCommand;
 import io.axoniq.labs.chat.coreapi.JoinRoomCommand;
+import io.axoniq.labs.chat.coreapi.LeaveRoomCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +41,7 @@ public class CommandController {
 
     @DeleteMapping("/rooms/{roomId}/participants")
     public Future<Void> leaveChatRoom(@PathVariable String roomId, @RequestBody @Valid Participant participant) {
-        // TODO: Send a command for this API call.
-        throw new UnsupportedOperationException("Not implemented yet");
+        return commandGateway.send(new LeaveRoomCommand(roomId, participant.getName()));
     }
 
     public static class PostMessageRequest {
