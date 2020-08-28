@@ -1,15 +1,17 @@
 package io.axoniq.labs.chat.query.rooms.messages;
 
 import io.axoniq.labs.chat.coreapi.MessagePostedEvent;
+import io.axoniq.labs.chat.coreapi.RoomMessagesQuery;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.Timestamp;
+import org.axonframework.queryhandling.QueryHandler;
 import org.axonframework.queryhandling.QueryUpdateEmitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.Calendar;
+import java.util.Collection;
 
 @Component
 public class ChatMessageProjection {
@@ -32,7 +34,11 @@ public class ChatMessageProjection {
         repository.save(message);
     }
 
-    // TODO: Create the query handler to read data from this model.
+    @QueryHandler
+    public Collection<ChatMessage> handle(RoomMessagesQuery query) {
+        logger.debug("handling query event {}", query);
+        return repository.findAllByRoomIdOrderByTimestamp(query.getRoomId());
+    }
 
     // TODO: Emit updates when new message arrive to notify subscription query by modifying the event handler.
 }
