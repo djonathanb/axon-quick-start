@@ -47,7 +47,7 @@ public class RoomSummaryProjection {
     }
 
     @QueryHandler
-    public Collection<RoomSummary> on(AllRoomsQuery query) {
+    public Collection<RoomSummary> handle(AllRoomsQuery query) {
         logger.debug("handling query event {}", query);
         return roomSummaryRepository.findAll();
     }

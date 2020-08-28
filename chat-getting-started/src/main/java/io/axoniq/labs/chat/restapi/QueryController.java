@@ -1,7 +1,9 @@
 package io.axoniq.labs.chat.restapi;
 
 import io.axoniq.labs.chat.coreapi.AllRoomsQuery;
+import io.axoniq.labs.chat.coreapi.RoomParticipantsQuery;
 import io.axoniq.labs.chat.query.rooms.messages.ChatMessage;
+import io.axoniq.labs.chat.query.rooms.participants.RoomParticipant;
 import io.axoniq.labs.chat.query.rooms.summary.RoomSummary;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
@@ -30,8 +32,7 @@ public class QueryController {
 
     @GetMapping("/rooms/{roomId}/participants")
     public Future<List<String>> participantsInRoom(@PathVariable String roomId) {
-        // TODO: Send a query for this API call.
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queryGateway.query(new RoomParticipantsQuery(roomId), ResponseTypes.multipleInstancesOf(String.class));
     }
 
     @GetMapping("/rooms/{roomId}/messages")
