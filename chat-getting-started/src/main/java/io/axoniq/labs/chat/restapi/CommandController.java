@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
 import java.util.concurrent.Future;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -26,7 +27,7 @@ public class CommandController {
 
     @PostMapping("/rooms")
     public Future<String> createChatRoom(@RequestBody @Valid Room room) {
-        return commandGateway.send(new CreateRoomCommand(room.getRoomId(), room.getName()));
+        return commandGateway.send(new CreateRoomCommand(UUID.randomUUID().toString(), room.getName()));
     }
 
     @PostMapping("/rooms/{roomId}/participants")
