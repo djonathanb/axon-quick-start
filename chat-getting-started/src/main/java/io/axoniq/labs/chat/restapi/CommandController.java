@@ -1,15 +1,8 @@
 package io.axoniq.labs.chat.restapi;
 
-import io.axoniq.labs.chat.coreapi.CreateRoomCommand;
-import io.axoniq.labs.chat.coreapi.JoinRoomCommand;
-import io.axoniq.labs.chat.coreapi.LeaveRoomCommand;
-import io.axoniq.labs.chat.coreapi.PostMessageCommand;
+import io.axoniq.labs.chat.coreapi.*;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 import java.util.concurrent.Future;
