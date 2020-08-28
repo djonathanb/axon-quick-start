@@ -8,6 +8,7 @@ import io.axoniq.labs.chat.query.rooms.participants.RoomParticipant;
 import io.axoniq.labs.chat.query.rooms.summary.RoomSummary;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
+import org.axonframework.queryhandling.SubscriptionQueryResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +44,10 @@ public class QueryController {
 
     @GetMapping(value = "/rooms/{roomId}/messages/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ChatMessage> subscribeRoomMessages(@PathVariable String roomId) {
-        // TODO: Send a subscription query for this API call.
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queryGateway.subscriptionQuery(
+                new RoomMessagesQuery(roomId),
+                ResponseTypes.multipleInstancesOf(ChatMessage.class),
+                ResponseTypes.instanceOf(ChatMessage.class))
+                .updates();
     }
 }

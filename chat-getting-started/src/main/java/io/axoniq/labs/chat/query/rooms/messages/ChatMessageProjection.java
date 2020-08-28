@@ -32,6 +32,8 @@ public class ChatMessageProjection {
         long instant = timestamp.toEpochMilli();
         ChatMessage message = new ChatMessage(event.getParticipant(), event.getRoomId(), event.getMessage(), instant);
         repository.save(message);
+
+        updateEmitter.emit(RoomMessagesQuery.class, query -> query.getRoomId().equals(event.getRoomId()), message);
     }
 
     @QueryHandler
@@ -40,5 +42,4 @@ public class ChatMessageProjection {
         return repository.findAllByRoomIdOrderByTimestamp(query.getRoomId());
     }
 
-    // TODO: Emit updates when new message arrive to notify subscription query by modifying the event handler.
 }
